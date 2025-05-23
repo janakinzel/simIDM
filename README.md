@@ -1,4 +1,4 @@
-The purpose of this fork is to extend simIDM to be able to simulate data from a Cox model with given covariate and parameter values. Original README below.
+The purpose of this fork is to extend simIDM to be able to simulate IDM-data from a Cox model with given covariate and parameter values. First changes have been made in branch "cox", but further changes are needed. Original README below.
 <!-- markdownlint-disable-file -->
 
 <!-- README.md needs to be generated from README.Rmd. Please edit that file -->
