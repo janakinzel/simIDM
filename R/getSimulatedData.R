@@ -166,7 +166,8 @@ addStaggeredEntry <- function(simData, N, accrualParam, accrualValue) {
 getSimulatedData <- function(N,
                              transition = exponential_transition(h01 = 1, h02 = 1, h12 = 1),
                              dropout = list(rate = 0, time = 12),
-                             accrual = list(param = "time", value = 0)) {
+                             accrual = list(param = "time", value = 0),
+                             betas, X) {
   # Check input parameters.
   assert_int(N, lower = 1L)
   assert_class(transition, "TransitionParameters")
@@ -219,9 +220,28 @@ getSimulatedData <- function(N,
     denumerator <- getPWCHazard(h$h01, pw$pw01, wait_time) +
       getPWCHazard(h$h02, pw$pw02, wait_time)
   }
+  # Survival times from Cox model
+  if(transition$family == "cox"){
+    haz01 <- c()
+    haz02 <- c()
+    wait_time <- c()
+    to <- c()
+    for(i in 1:N){ # everything needs to be calculated on patient level because of covariates
+      haz01[i] <- h$h01 * exp(betas$b01 %*% X[i,])
+      haz02[i] <- h$h02 * exp(betas$b02 %*% X[i,])
+      wait_time[i] <- -log(1-U[i]) / (haz01[i] + haz02[i])
+      # binomial experiment
+      numerator <- haz01[i]
+      denominator <- haz01[i] + haz02[i]
+      to_prob <- stats::rbinom(1, 1, numerator / denominator)
+      to[i] <- ifelse(to_prob == 0, 2, 1)
+    }
 
-  to_prob <- stats::rbinom(N, 1, numerator / denumerator)
-  to <- ifelse(to_prob == 0, 2, 1)
+  }
+  if(transition$family != "cox"){ # for "cox" it is done above on patient level
+    to_prob <- stats::rbinom(N, 1, numerator / denumerator)
+    to <- ifelse(to_prob == 0, 2, 1)
+  }
   exit <- wait_time
 
   # Add censoring.
@@ -236,7 +256,8 @@ getSimulatedData <- function(N,
   if (any(is_intermediate_state)) {
     # Add 1 -> 2 transition only for patients that are in the intermediate state 1.
     simDataOne <- simData[is_intermediate_state, ]
-    newrows <- getOneToTwoRows(simDataOne, transition)
+    newrows <- getOneToTwoRows(simDataOne, transition,
+                               betas, X)
     simData <- rbind(simData, newrows)
     simData <- simData[order(simData$id), ]
   }
