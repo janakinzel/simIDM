@@ -1,3 +1,22 @@
+make_betas <- function(b01,b02,b12){
+  list(b01=b01, b02=b02, b12=b12)
+}
+
+cox_transition <- function(h01 = 1, h02 = 1, h12 = 1){
+  assert_positive_number(h01, zero_ok = TRUE)
+  assert_positive_number(h02, zero_ok = TRUE)
+  assert_positive_number(h12, zero_ok = TRUE)
+  structure(
+    list(
+      hazards = list(h01 = h01, h02 = h02, h12 = h12),
+      intervals = list(pw01 = 0, pw02 = 0, pw12 = 0),
+      weibull_rates = list(p01 = 1, p02 = 1, p12 = 1),
+      family = "cox"
+    ),
+    class = c("CoxTransition", "TransitionParameters")
+  )
+}
+
 #' Transition Hazards for Exponential Event Times
 #'
 #' This creates a list with class `TransitionParameters` containing
