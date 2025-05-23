@@ -29,7 +29,9 @@
 #' )
 getOneClinicalTrial <- function(nPat, transitionByArm,
                                 dropout = list(rate = 0, time = 12),
-                                accrual = list(param = "time", value = 0)) {
+                                accrual = list(param = "time", value = 0),
+                                betas = NULL,
+                                X = NULL) {
   assert_list(transitionByArm)
   nPat <- as.integer(nPat)
   nArm <- length(transitionByArm)
@@ -60,7 +62,7 @@ getOneClinicalTrial <- function(nPat, transitionByArm,
   simdata <- NULL
   previousPts <- 0
   for (i in seq_len(nArm)) {
-    group <- getSimulatedData(nPat[i], transitionByArm[[i]], dropout[[i]], accrual[[i]])
+    group <- getSimulatedData(nPat[i], transitionByArm[[i]], dropout[[i]], accrual[[i]], betas, X)
     group$trt <- i
     group$id <- group$id + previousPts
     simdata <- rbind(simdata, group)
