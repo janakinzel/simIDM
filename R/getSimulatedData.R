@@ -22,7 +22,8 @@
 #' )
 #' transition <- exponential_transition(1, 1.6, 0.3)
 #' getOneToTwoRows(simDataOne, transition)
-getOneToTwoRows <- function(simDataOne, transition) {
+getOneToTwoRows <- function(simDataOne, transition,
+                            betas, X) {
   assert_data_frame(simDataOne, ncols = 6)
   assert_class(transition, "TransitionParameters")
 
@@ -36,6 +37,8 @@ getOneToTwoRows <- function(simDataOne, transition) {
   p12 <- transition$weibull_rates$p12
   pw12 <- transition$intervals$pw12
 
+  X1 <- X[id1,]
+
   # Create waiting time in state 1.
   wait_time1 <- if (transition$family == "exponential") {
     (-log(1 - U1)) / (h12)
@@ -43,6 +46,14 @@ getOneToTwoRows <- function(simDataOne, transition) {
     getWaitTimeSum(U = U1, haz1 = h12, haz2 = 0, p1 = p12, p2 = 1, entry = entry1)
   } else if (transition$family == "piecewise exponential") {
     getPCWDistr(U = U1, haz = h12, pw = pw12, t_0 = entry1)
+  } else if (transition$family == "cox"){
+    haz12 <- c()
+    wait_time1 <- c()
+    for(i in 1:N1){ # everything needs to be calculated on patient level because of covariates
+      haz12[i] <- h12 * exp(betas$b12 %*% X1[i,])
+      wait_time1[i] <- -log(1-U1[i]) / haz12[i]
+    }
+    wait_time1
   }
   exit1 <- entry1 + wait_time1
 
