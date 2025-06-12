@@ -4,15 +4,19 @@
 \alias{getOneToTwoRows}
 \title{Transitions from the Intermediate State to the Absorbing State}
 \usage{
-getOneToTwoRows(simDataOne, transition)
+getOneToTwoRows(simDataOne, transition, betas, X)
 }
 \arguments{
 \item{simDataOne}{(\code{data.frame})\cr a data frame containing all patients with transitions
 into the intermediate state. See \code{\link[=getSimulatedData]{getSimulatedData()}} for details.}
 
 \item{transition}{(\code{TransitionParameters})\cr transition parameters comprising
-\code{hazards}, corresponding \code{intervals} and \code{weibull_rates}, see \code{\link[=exponential_transition]{exponential_transition()}}, \code{\link[=piecewise_exponential]{piecewise_exponential()}}
-and \code{\link[=weibull_transition]{weibull_transition()}} for details.}
+\code{hazards}, corresponding \code{intervals} and \code{weibull_rates}, see \code{\link[=exponential_transition]{exponential_transition()}}, \code{\link[=piecewise_exponential]{piecewise_exponential()}},
+\code{\link[=weibull_transition]{weibull_transition()}} and \code{\link[=cox_transition]{cox_transition()}} for details.}
+
+\item{betas}{betas (\code{list})\cr specifies parameters for Cox transition hazards. See \code{\link[=make_betas]{make_betas()}} for details.}
+
+\item{X}{X (\code{matrix})\cr specifies covariate values for Cox transition hazards.}
 }
 \value{
 This returns a data frame with one row per patient for the second transition,

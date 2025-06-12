@@ -8,7 +8,9 @@ getSimulatedData(
   N,
   transition = exponential_transition(h01 = 1, h02 = 1, h12 = 1),
   dropout = list(rate = 0, time = 12),
-  accrual = list(param = "time", value = 0)
+  accrual = list(param = "time", value = 0),
+  betas,
+  X
 )
 }
 \arguments{
@@ -24,6 +26,10 @@ the drop-out probability per \code{dropout$time} time units.
 If \code{dropout$rate} is equal to 0, then no censoring is applied.}
 
 \item{accrual}{(\code{list})\cr specifies accrual intensity. See \code{\link[=addStaggeredEntry]{addStaggeredEntry()}} for details.}
+
+\item{betas}{betas (\code{list})\cr specifies parameters for Cox transition hazards. See \code{\link[=make_betas]{make_betas()}} for details.}
+
+\item{X}{X (\code{matrix})\cr specifies covariate values for Cox transition hazards.}
 }
 \value{
 This returns a data frame with one row per transition per individual.
