@@ -1,4 +1,4 @@
-#' `simIDM_cox` Package
+#' `simIDM` Package
 #'
 #' `simIDM` simulates a survival multistate model that jointly models PFS and OS.
 #'
