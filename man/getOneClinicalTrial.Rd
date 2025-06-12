@@ -8,7 +8,9 @@ getOneClinicalTrial(
   nPat,
   transitionByArm,
   dropout = list(rate = 0, time = 12),
-  accrual = list(param = "time", value = 0)
+  accrual = list(param = "time", value = 0),
+  betas = NULL,
+  X = NULL
 )
 }
 \arguments{
@@ -24,6 +26,10 @@ for each treatment group.}
 \item{accrual}{accrual (\code{list})\cr specifies accrual intensity. See \code{\link[=addStaggeredEntry]{addStaggeredEntry()}} for details.
 Can be specified either as one list that should be applied to all treatment groups or a separate list
 for each treatment group.}
+
+\item{betas}{betas (\code{list})\cr specifies parameters for Cox transition hazards. See \code{\link[=make_betas]{make_betas()}} for details.}
+
+\item{X}{X (\code{matrix}) specifies covariate values for Cox transition hazards.}
 }
 \value{
 This returns a data frame with one simulated clinical trial and multiple treatment arms.
