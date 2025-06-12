@@ -1,7 +1,35 @@
+#' Parameter vectors for Cox model
+#'
+#' This creates a list containing the parameter vectors for the Cox model
+#' for the three transitions in an illness-death model.
+#'
+#' @param b01 (numeric vector)\cr betas for 0 to 1 transition.
+#' @param b02 (numeric vector)\cr betas for 0 to 2 transition.
+#' @param b12 (numeric vector)\cr betas for 1 to 1 transition.
+#'
+#' @return List with three beta vectors as elements.
+#' @export
+#'
 make_betas <- function(b01,b02,b12){
   list(b01=b01, b02=b02, b12=b12)
 }
 
+#' Transition Hazards for Cox Event Times
+#'
+#' This creates a list with class `TransitionParameters` containing
+#' baseline hazards, time intervals and Weibull rates for Cox event times
+#' in an illness-death model.
+#'
+#' @param h01 (positive `number`)\cr baseline transition hazard for 0 to 1 transition.
+#' @param h02 (positive `number`)\cr baseline transition hazard for 0 to 2 transition.
+#' @param h12 (positive `number`)\cr baseline transition hazard for 1 to 2 transition.
+#'
+#' @return List with elements `hazards`, `intervals`, `weibull_rates` and `family`
+#'   (cox).
+#' @export
+#'
+#' @examples
+#' cox_transition(1, 1.6, 0.3)
 cox_transition <- function(h01 = 1, h02 = 1, h12 = 1){
   assert_positive_number(h01, zero_ok = TRUE)
   assert_positive_number(h02, zero_ok = TRUE)

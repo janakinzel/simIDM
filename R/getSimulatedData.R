@@ -6,8 +6,10 @@
 #' @param simDataOne (`data.frame`)\cr a data frame containing all patients with transitions
 #'  into the intermediate state. See [getSimulatedData()] for details.
 #' @param transition (`TransitionParameters`)\cr transition parameters comprising
-#'  `hazards`, corresponding `intervals` and `weibull_rates`, see [exponential_transition()], [piecewise_exponential()]
-#'  and [weibull_transition()] for details.
+#'  `hazards`, corresponding `intervals` and `weibull_rates`, see [exponential_transition()], [piecewise_exponential()],
+#'  [weibull_transition()] and [cox_transition()] for details.
+#' @param betas betas (`list`)\cr specifies parameters for Cox transition hazards. See [make_betas()] for details.
+#' @param X X (`matrix`)\cr specifies covariate values for Cox transition hazards.
 #'
 #' @return This returns a data frame with one row per patient for the second transition,
 #'  i.e. the transition out of the intermediate
@@ -143,6 +145,8 @@ addStaggeredEntry <- function(simData, N, accrualParam, accrualValue) {
 #'   the drop-out probability per `dropout$time` time units.
 #'   If `dropout$rate` is equal to 0, then no censoring is applied.
 #' @param accrual (`list`)\cr specifies accrual intensity. See [addStaggeredEntry()] for details.
+#' @param betas betas (`list`)\cr specifies parameters for Cox transition hazards. See [make_betas()] for details.
+#' @param X X (`matrix`)\cr specifies covariate values for Cox transition hazards.
 #'
 #' @return This returns a data frame with one row per transition per individual.
 #' @details The output data set contains the following columns:

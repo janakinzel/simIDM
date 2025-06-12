@@ -12,6 +12,8 @@
 #' @param accrual  accrual (`list`)\cr specifies accrual intensity. See [addStaggeredEntry()] for details.
 #'  Can be specified either as one list that should be applied to all treatment groups or a separate list
 #'  for each treatment group.
+#' @param betas betas (`list`)\cr specifies parameters for Cox transition hazards. See [make_betas()] for details.
+#' @param X X (`matrix`) specifies covariate values for Cox transition hazards.
 #'
 #' @return This returns a data frame with one simulated clinical trial and multiple treatment arms.
 #'   See [getSimulatedData()] for the explanation of the columns. The column `trt` contains the treatment indicator.
